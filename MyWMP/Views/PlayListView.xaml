@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="MyWMP.PlayListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:item="clr-namespace:MyWMP.Views"
+             xmlns:model="clr-namespace:MyWMP.ViewModels" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+             xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+             xmlns:behave="clr-namespace:MyWMP.Behaviors">
+    <UserControl.DataContext>
+        <model:PlayListViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid  HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="250" MinWidth="100" MaxWidth="400"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Column="0" x:Name="treeView1">
+                <TreeViewItem  MinHeight="40" Name="MediaRootItem"
+                          Header="Bibliotheque" IsExpanded="True">
+                    <TreeViewItem  Name="VideoRootItem"
+                          Header="Videos" Tag="Video">
+                        <i:Interaction.Behaviors>
+                            <behave:TreeViewItemBehavior />
+                        </i:Interaction.Behaviors>
+                    </TreeViewItem>
+                    <TreeViewItem  Name="MusicRootItem"
+                          Header="Musique" Tag="Music">
+                        <i:Interaction.Behaviors>
+                            <behave:TreeViewItemBehavior />
+                        </i:Interaction.Behaviors>
+                    </TreeViewItem>
+                    <TreeViewItem Name="ImgRootItem"
+                          Header="Images" Tag="Pic">
+                        <i:Interaction.Behaviors>
+                            <behave:TreeViewItemBehavior />
+                        </i:Interaction.Behaviors>
+                    </TreeViewItem>
+                    <TreeViewItem  Name="PlayListRootItem"
+                          Header="Liste de lecture" IsExpanded="True" ItemsSource="{Binding Path=MediaMgr.Playlists}">
+                        <TreeViewItem.ItemTemplate>
+                            <DataTemplate DataType="{x:Type item:PlayListItem}">
+                                <item:PlayListItem DataContext="{Binding}">
+                                </item:PlayListItem>
+                            </DataTemplate>
+                        </TreeViewItem.ItemTemplate>
+                        <i:Interaction.Behaviors>
+                            <behave:PlayListItemBehavior />
+                        </i:Interaction.Behaviors>
+                    </TreeViewItem>
+                </TreeViewItem>
+                <!--<TreeViewItem.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type item:MediaItem}" ItemsSource="{Binding PlayListMgr.PlayLists}">
+                        <item:MediaItem />
+                    </HierarchicalDataTemplate>
+                </TreeViewItem.ItemTemplate>-->
+                <TreeView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid HorizontalAlignment="Left" 
+                      IsItemsHost="True" />
+                    </ItemsPanelTemplate>
+                </TreeView.ItemsPanel>
+            </TreeView>
+            <DataGrid Grid.Column="1" ItemsSource="{Binding Path=MediaMgr.CurrentMediaListSelected}" EnableRowVirtualization="True" 
+             AutoGenerateColumns="False" IsReadOnly="True" VerticalAlignment="Stretch">
+                <i:Interaction.Behaviors>
+                    <behave:DataGridSelectionBehavior />
+                </i:Interaction.Behaviors>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</UserControl>

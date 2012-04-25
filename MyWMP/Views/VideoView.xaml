@@ -1,0 +1,67 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:model="clr-namespace:MyWMP.ViewModels" 
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" x:Class="MyWMP.VideoView"
+    xmlns:behave="clr-namespace:MyWMP.Behaviors">
+    <UserControl.DataContext>
+        <model:VideoViewModel /> 
+    </UserControl.DataContext>
+    <DockPanel x:Name="dockWindow" LastChildFill="True">
+        <StackPanel x:Name="playBar" DockPanel.Dock="Bottom" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="Black" Orientation="Vertical">
+            <Slider x:Name="lengthSlider" HorizontalAlignment="Stretch" Margin="10, 0, 10, 0"
+                        Maximum="{Binding SlideMgr.MaximumDuration}"
+                        SmallChange="{Binding SlideMgr.SliderSmallChange}"
+                        LargeChange="{Binding SlideMgr.SliderLargeChange}"
+                        Value="{Binding SlideMgr.SliderValue}" Thumb.DragStarted="lengthSlider_DragStarted"  Thumb.DragCompleted="lengthSlider_DragCompleted">
+                <i:Interaction.Behaviors>
+                    <behave:SliderBehavior />
+                </i:Interaction.Behaviors>
+            </Slider>
+            <Grid HorizontalAlignment="Center">
+                <Button HorizontalAlignment="Left" Margin="16,0,0,13"
+            			x:Name="PlayButton" VerticalAlignment="Bottom"
+            		 Foreground="Black" Width="75" Height="23" Content="Play">
+                    <i:Interaction.Behaviors>
+                        <behave:PlayBehavior />
+                    </i:Interaction.Behaviors>
+                </Button>
+
+                <Button Height="23" HorizontalAlignment="Left" Margin="103,0,0,13"
+            			x:Name="PauseButton" VerticalAlignment="Bottom" Width="75"
+            			Content="Pause">
+                    <i:Interaction.Behaviors>
+                        <behave:PauseBehavior />
+                    </i:Interaction.Behaviors>
+                </Button>
+                <Button Height="23" Margin="191,0,186,13" x:Name="StopButton"
+            			VerticalAlignment="Bottom" Content="Stop">
+                    <i:Interaction.Behaviors>
+                        <behave:StopBehavior />
+                    </i:Interaction.Behaviors>
+                </Button>
+
+                <Label HorizontalAlignment="Right" 
+                           Content="{Binding DataMgr.MediaLength, Mode=OneWay}" Foreground="White" Background="Black" 
+                           Height="23" Margin="0,0,126,13" />
+
+                <Button Height="23" Margin="337,0,11,11" x:Name="FullScreen"
+            			VerticalAlignment="Bottom" Content="FullScreen">
+                    <i:Interaction.Behaviors>
+                        <behave:FullScreenBehavior />
+                    </i:Interaction.Behaviors>
+                </Button>
+            </Grid>
+        </StackPanel>
+        <Grid Background="Black" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <MediaElement HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="MediaCtrl"
+                          LoadedBehavior="Manual" UnloadedBehavior="Manual" Margin="10" Source="{Binding DataMgr.CurrentMediaPlaying}" >
+                <i:Interaction.Behaviors>
+                    <behave:MediaBehavior />
+                </i:Interaction.Behaviors>
+
+            </MediaElement>
+        </Grid>
+    </DockPanel>
+</UserControl>
